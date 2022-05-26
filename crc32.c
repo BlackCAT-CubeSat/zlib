@@ -642,7 +642,7 @@ unsigned long ZEXPORT crc32_z(crc, buf, len)
     }
 
     /* Prepare to compute the CRC on full 64-bit words word[0..num-1]. */
-    word = (z_word_t const *)buf;
+    word = (z_word_t const *) ASSUME_ALIGNED(buf, 8);
     num = len >> 3;
     len &= 7;
 
@@ -774,7 +774,7 @@ unsigned long ZEXPORT crc32_z(crc, buf, len)
         /* Compute the CRC on as many N z_word_t blocks as are available. */
         blks = len / (N * W);
         len -= blks * N * W;
-        words = (z_word_t const *)buf;
+        words = (z_word_t const *) ASSUME_ALIGNED(buf, W);
 
         /* Do endian check at execution time instead of compile time, since ARM
            processors can change the endianess at execution time. If the

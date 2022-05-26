@@ -271,4 +271,13 @@ extern z_const char * const z_errmsg[10]; /* indexed by 2-zlib_error */
 #define ZSWAP32(q) ((((q) >> 24) & 0xff) + (((q) >> 8) & 0xff00) + \
                     (((q) & 0xff00) << 8) + (((q) & 0xff) << 24))
 
+/* Declare to the compiler that we have verified that we have verified
+ * that the pointer ptr is aligned to a multiple of alignment bytes. */
+#if defined(__GNUC__) || defined(__clang__)
+#  define ASSUME_ALIGNED(ptr, alignment) \
+     (__builtin_assume_aligned((ptr), (alignment)))
+#else
+#  define ASSUME_ALIGNED(ptr, alignment) (ptr)
+#endif
+
 #endif /* ZUTIL_H */
